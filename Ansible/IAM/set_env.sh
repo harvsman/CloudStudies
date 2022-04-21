@@ -1,0 +1,5 @@
+    export PARENT_COMPARTMENT_OCID=ocid1.tenancy.oc1..aaaaaaaaoshgpz37uvzuhry4eh4m52uwce5tsx4ql4crrimssz2kq6rs2lxa
+    export COMPUTE_COMPARTMENT_OCID=ocid1.compartment.oc1..aaaaaaaa3av7l7dpfy6qdsvvs3wcwsrze3po3rqbf5qslakutdtwa47kx6xa
+    export REDES_COMPARTMENT_OCID=ocid1.compartment.oc1..aaaaaaaaovzpssjhxrs7spilt7r5fjvr75cfbjqhhcvpvk6xjffxxdw3p4lq
+    export DB_COMPARTMENT_OCID=ocid1.compartment.oc1..aaaaaaaazb5h2kwff2yghecb2ewfkp3rv43cyxs5nfviemlkr32uvsmmtqgq
+
