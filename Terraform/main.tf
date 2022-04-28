@@ -166,11 +166,6 @@ resource "oci_load_balancer_load_balancer" "mod4_load_balancer" {
     shape = "10Mbps"
     subnet_ids = [oci_core_subnet.tcb_subnet.id]
     is_private = "false"
-    shape_details {
-        #Required
-        maximum_bandwidth_in_mbps = 10
-        minimum_bandwidth_in_mbps = 10
-    }
 }
 
 resource "oci_load_balancer_backend_set" "lb-bes1" {
