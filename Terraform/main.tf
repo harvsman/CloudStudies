@@ -157,11 +157,12 @@ resource "oci_core_instance" "webserver2" {
     ssh_authorized_keys = var.ssh_public_key
   }
 
+}
 
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
-      host        = "${self.public_ip}"
+      host        = oci_core_instance.webserver1.public_ip
       user        = "opc"
       private_key = var.private_key
     }
@@ -172,8 +173,6 @@ resource "oci_core_instance" "webserver2" {
       "./deploy_niture.sh",
     ]
   }
-}
-
 
 resource "oci_load_balancer" "mod4_load_balancer" {
     #Required
