@@ -156,13 +156,13 @@ resource "oci_core_instance" "webserver2" {
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
   }
-  
+
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
       host        = oci_core_instance.webserver1.public_ip
       user        = "opc"
-      private_key = var.private_key
+      private_key = ${file(var.private_key)}
     }
 
     inline = [
