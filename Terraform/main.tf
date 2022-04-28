@@ -181,6 +181,20 @@ resource "oci_load_balancer_backend_set" "lb-bes1" {
   }
 }
 
+resource "oci_load_balancer_hostname" "webserver1" {
+  #Required
+  hostname         = "webserver1"
+  load_balancer_id = oci_load_balancer_load_balancer.mod4_load_balancer.id
+  name             = "webserver1"
+}
+
+resource "oci_load_balancer_hostname" "webserver2" {
+  #Required
+  hostname         = "webserver2"
+  load_balancer_id = oci_load_balancer_load_balancer.mod4_load_balancer.id
+  name             = "webserver2"
+}
+
 resource "oci_load_balancer_listener" "lb-listener1" {
   load_balancer_id         = oci_load_balancer_load_balancer.mod4_load_balancer.id
   name                     = "http"
