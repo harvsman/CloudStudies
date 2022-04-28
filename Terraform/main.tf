@@ -156,9 +156,7 @@ resource "oci_core_instance" "webserver2" {
   metadata = {
     ssh_authorized_keys = var.ssh_public_key
   }
-
-}
-
+  
   provisioner "remote-exec" {
     connection {
       type        = "ssh"
@@ -173,6 +171,9 @@ resource "oci_core_instance" "webserver2" {
       "./deploy_niture.sh",
     ]
   }
+
+}
+
 
 resource "oci_load_balancer" "mod4_load_balancer" {
     #Required
