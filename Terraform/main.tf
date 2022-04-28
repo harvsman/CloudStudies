@@ -159,7 +159,7 @@ resource "oci_core_instance" "webserver2" {
 }
 
 
-resource "oci_load_balancer_load_balancer" "mod4_load_balancer" {
+resource "oci_load_balancer" "mod4_load_balancer" {
     #Required
     compartment_id = var.compartment_ocid
     display_name = "mod4_load_balancer"
@@ -170,7 +170,7 @@ resource "oci_load_balancer_load_balancer" "mod4_load_balancer" {
 
 resource "oci_load_balancer_backend_set" "lb-bes1" {
   name             = "lb-bes1"
-  load_balancer_id = oci_load_balancer_load_balancer.mod4_load_balancer.id
+  load_balancer_id = oci_load_balancer.mod4_load_balancer.id
   policy           = "ROUND_ROBIN"
 
   health_checker {
@@ -184,19 +184,19 @@ resource "oci_load_balancer_backend_set" "lb-bes1" {
 resource "oci_load_balancer_hostname" "webserver1" {
   #Required
   hostname         = "webserver1"
-  load_balancer_id = oci_load_balancer_load_balancer.mod4_load_balancer.id
+  load_balancer_id = oci_load_balancer.mod4_load_balancer.id
   name             = "webserver1"
 }
 
 resource "oci_load_balancer_hostname" "webserver2" {
   #Required
   hostname         = "webserver2"
-  load_balancer_id = oci_load_balancer_load_balancer.mod4_load_balancer.id
+  load_balancer_id = oci_load_balancer.mod4_load_balancer.id
   name             = "webserver2"
 }
 
 resource "oci_load_balancer_listener" "lb-listener1" {
-  load_balancer_id         = oci_load_balancer_load_balancer.mod4_load_balancer.id
+  load_balancer_id         = oci_load_balancer.mod4_load_balancer.id
   name                     = "http"
   default_backend_set_name = oci_load_balancer_backend_set.lb-bes1.name
   hostname_names           = [oci_load_balancer_hostname.webserver1.name, oci_load_balancer_hostname.webserver2.name]
@@ -207,4 +207,26 @@ resource "oci_load_balancer_listener" "lb-listener1" {
   connection_configuration {
     idle_timeout_in_seconds = "2"
   }
+}
+
+resource "oci_load_balancer_backend" "lb-be1" {
+  load_balancer_id = oci_load_balancer.mod4_load_balancer.id
+  backendset_name  = oci_load_balancer_backend_set.lb-bes1.name
+  ip_address       = oci_core_instance.webserver1.private_ip
+  port             = 80
+  backup           = false
+  drain            = false
+  offline          = false
+  weight           = 1
+}
+
+resource "oci_load_balancer_backend" "lb-be2" {
+  load_balancer_id = oci_load_balancer.mod4_load_balancer.id
+  backendset_name  = oci_load_balancer_backend_set.lb-bes1.name
+  ip_address       = oci_core_instance.webserver2.private_ip
+  port             = 80
+  backup           = false
+  drain            = false
+  offline          = false
+  weight           = 1
 }
