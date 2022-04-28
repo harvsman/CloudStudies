@@ -168,8 +168,8 @@ resource "oci_load_balancer_load_balancer" "mod4_load_balancer" {
     is_private = "false"
     shape_details {
         #Required
-        maximum_bandwidth_in_mbps = "10Mbps"
-        minimum_bandwidth_in_mbps = "10Mbps"
+        maximum_bandwidth_in_mbps = 10
+        minimum_bandwidth_in_mbps = 10
     }
 }
 
