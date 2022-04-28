@@ -135,3 +135,67 @@ resource "oci_core_instance" "webserver1" {
   }
 }
 
+resource "oci_core_instance" "webserver2" {
+  availability_domain = data.oci_identity_availability_domain.ad.name
+  compartment_id      = var.compartment_ocid
+  display_name        = "webserver2"
+  shape               = "VM.Standard.E2.1.Micro"
+
+  create_vnic_details {
+    subnet_id        = oci_core_subnet.tcb_subnet.id
+    display_name     = "primaryvnic"
+    assign_public_ip = true
+    hostname_label   = "webserver2"
+  }
+
+  source_details {
+    source_type = "image"
+    source_id   = var.images[var.region]
+  }
+
+  metadata = {
+    ssh_authorized_keys = var.ssh_public_key
+  }
+}
+
+
+resource "oci_load_balancer_load_balancer" "mod4_load_balancer" {
+    #Required
+    compartment_id = var.compartment_ocid
+    display_name = "mod4_load_balancer"
+    shape = "10Mbps"
+    subnet_ids = oci_core_subnet.tcb_subnet.id
+    is_private = "false"
+    shape_details {
+        #Required
+        maximum_bandwidth_in_mbps = "10Mbps"
+        minimum_bandwidth_in_mbps = "10Mbps"
+    }
+}
+
+resource "oci_load_balancer_backend_set" "lb-bes1" {
+  name             = "lb-bes1"
+  load_balancer_id = oci_load_balancer.mod4_load_balancer.id
+  policy           = "ROUND_ROBIN"
+
+  health_checker {
+    port                = "80"
+    protocol            = "HTTP"
+    response_body_regex = ".*"
+    url_path            = "/"
+  }
+}
+
+resource "oci_load_balancer_listener" "lb-listener1" {
+  load_balancer_id         = oci_load_balancer.mod4_load_balancer.id
+  name                     = "http"
+  default_backend_set_name = oci_load_balancer_backend_set.lb-bes1.name
+  hostname_names           = [oci_load_balancer_hostname.webserver1.name, oci_load_balancer_hostname.webserver2.name]
+  port                     = 80
+  protocol                 = "HTTP"
+  rule_set_names           = [oci_load_balancer_rule_set.test_rule_set.name]
+
+  connection_configuration {
+    idle_timeout_in_seconds = "2"
+  }
+}
