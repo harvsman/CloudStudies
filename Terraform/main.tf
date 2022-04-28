@@ -164,7 +164,7 @@ resource "oci_load_balancer_load_balancer" "mod4_load_balancer" {
     compartment_id = var.compartment_ocid
     display_name = "mod4_load_balancer"
     shape = "10Mbps"
-    subnet_ids = oci_core_subnet.tcb_subnet.id
+    subnet_ids = [oci_core_subnet.tcb_subnet.id]
     is_private = "false"
     shape_details {
         #Required
