@@ -161,7 +161,7 @@ resource "oci_core_instance" "webserver2" {
     type        = "ssh"
     host        = "${self.public_ip}"
     user        = "opc"
-    private_key = "${file(var.ssh_public_key)}"
+    private_key = var.ssh_public_key
   }
 
   provisioner "remote-exec" {
