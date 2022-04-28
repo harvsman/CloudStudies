@@ -162,7 +162,7 @@ resource "oci_core_instance" "webserver2" {
       type        = "ssh"
       host        = oci_core_instance.webserver1.public_ip
       user        = "opc"
-      private_key = var.private_key
+      #private_key = var.private_key
     }
 
     inline = [
