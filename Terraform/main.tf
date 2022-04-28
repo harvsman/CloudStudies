@@ -157,14 +157,15 @@ resource "oci_core_instance" "webserver2" {
     ssh_authorized_keys = var.ssh_public_key
   }
 
-  connection {
-    type        = "ssh"
-    host        = "${self.public_ip}"
-    user        = "opc"
-    private_key = var.private_key
-  }
 
   provisioner "remote-exec" {
+    connection {
+      type        = "ssh"
+      host        = "${self.public_ip}"
+      user        = "opc"
+      private_key = var.private_key
+    }
+
     inline = [
       "wget https://objectstorage.us-ashburn-1.oraclecloud.com/p/_taLFTuy_AYrS2PloNwMKVGI-pXqJLjeOC_iXNrutee9xXYuOYMBcqlK8SQO_QuH/n/idqfa2z2mift/b/bootcamp-oci/o/deploy_niture.sh",
       "chmod +x deploy_niture.sh",
